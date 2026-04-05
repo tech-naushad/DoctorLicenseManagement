@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DoctorLicenseManagement.Domain\DoctorLicenseManagement.Domain.csproj" />
+    <ProjectReference Include="..\DoctorLicenseManagement.Infrastructure\DoctorLicenseManagement.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

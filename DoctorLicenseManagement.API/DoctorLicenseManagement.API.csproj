@@ -1,9 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DoctorLicenseManagement.Application\DoctorLicenseManagement.Application.csproj" />
+    <ProjectReference Include="..\DoctorLicenseManagement.Infrastructure\DoctorLicenseManagement.Infrastructure.csproj" />
+  </ItemGroup>
 
 </Project>
