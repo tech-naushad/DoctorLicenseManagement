@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DoctorLicenseManagement.Application.Common
 {
-    public abstract class ApiResponse
+    public class ApiResponse
     {
         public string Error { get; set; }
         public string Message { get; set; }

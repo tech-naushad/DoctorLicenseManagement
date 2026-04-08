@@ -3,17 +3,12 @@ using DoctorLicenseManagement.Domain.Entities;
 using DoctorLicenseManagement.Domain.Enums;
 using DoctorLicenseManagement.Infrastructure.Repositories;
 using MediatR;
+using System.Text.Json.Serialization;
 
 namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
 {
-    public class CreateDoctorCommand : IRequest<CreateDoctorCommandResponse>
-    {
-        public string FullName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Specialization { get; set; } = string.Empty;
-        public string LicenseNumber { get; set; } = string.Empty;
-        public DateTime LicenseExpiryDate { get; set; }
-        public LicenseStatus Status { get; set; }
+    public class CreateDoctorCommand : DoctorCommand,IRequest<CreateDoctorCommandResponse>
+    {       
     }
     public class CreateDoctorCommandResponse : ApiResponse
     {
@@ -62,4 +57,3 @@ namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
     }
 }
 
-    

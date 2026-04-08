@@ -6,14 +6,9 @@ using MediatR;
 
 namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
 {
-    public class UpdateDoctorCommand : IRequest<UpdateDoctorCommandResponse>
+    public class UpdateDoctorCommand : DoctorCommand,IRequest<UpdateDoctorCommandResponse>
     {
-        public string FullName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Specialization { get; set; } = string.Empty;
-        public string LicenseNumber { get; set; } = string.Empty;
-        public DateTime LicenseExpiryDate { get; set; }
-        public LicenseStatus Status { get; set; }
+        public int Id { get; set; }        
     }
     public class UpdateDoctorCommandResponse : ApiResponse
     {

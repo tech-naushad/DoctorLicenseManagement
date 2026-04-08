@@ -1,3 +1,4 @@
+using DoctorLicenseManagement.API.Middlewares;
 using DoctorLicenseManagement.Application;
 using DoctorLicenseManagement.Infrastructure.Data;
 using DoctorLicenseManagement.Infrastructure.Repositories;
@@ -20,7 +21,17 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Doctor License Management"
     });
 });
-
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClientApp", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000")  // Allow your React app
+               .AllowAnyMethod()                       // GET, POST, PUT, DELETE, etc.
+               .AllowAnyHeader()                       // Any headers
+               .AllowCredentials();                    // Allow cookies/auth
+    });
+});
 
 builder.Services.AddControllers();
 
@@ -33,9 +44,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 };
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("AllowClientApp");
 
 app.MapControllers();
 
