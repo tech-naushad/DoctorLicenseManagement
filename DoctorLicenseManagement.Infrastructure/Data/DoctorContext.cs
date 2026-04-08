@@ -20,7 +20,7 @@ namespace DoctorLicenseManagement.Infrastructure.Data
 
         public IDbConnection CreateConnection()
         {
-            return new SqlConnection(_config.GetConnectionString("DefaultConnection")); 
+            return new SqlConnection(_config.GetConnectionString("DoctorLicenseConnection")); 
         }
          
     }

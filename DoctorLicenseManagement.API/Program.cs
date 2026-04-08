@@ -1,5 +1,4 @@
-using DoctorLicenseManagement.Application.Interfaces;
-using DoctorLicenseManagement.Application.Services;
+using DoctorLicenseManagement.Application;
 using DoctorLicenseManagement.Infrastructure.Data;
 using DoctorLicenseManagement.Infrastructure.Repositories;
 using Microsoft.OpenApi.Models;
@@ -10,15 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<DoctorContext>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
-builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddApplicationServices();
 
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "My API",
+        Title = "Doctor License Management API",
         Version = "v1",
-        Description = "My .NET 8 Web API"
+        Description = "Doctor License Management"
     });
 });
 

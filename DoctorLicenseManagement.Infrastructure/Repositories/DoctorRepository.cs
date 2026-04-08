@@ -65,7 +65,7 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
                 parameters.Add("@LicenseNumber", doctor.LicenseNumber);
                 parameters.Add("@LicenseExpiryDate", doctor.LicenseExpiryDate);
                 parameters.Add("@Status", (int)doctor.Status);
-                parameters.Add("@CreatedDate", doctor.CreatedDate);
+                
 
                 return await con.ExecuteScalarAsync<int>(
                     "sp_CreateDoctor",

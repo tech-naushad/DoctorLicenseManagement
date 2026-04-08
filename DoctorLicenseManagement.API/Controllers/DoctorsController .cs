@@ -1,5 +1,5 @@
-﻿using DoctorLicenseManagement.Application.DTOs;
-using DoctorLicenseManagement.Application.Interfaces;
+﻿using DoctorLicenseManagement.Application.Commands.CreateDoctorCommand;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DoctorLicenseManagement.API.Controllers
@@ -8,55 +8,55 @@ namespace DoctorLicenseManagement.API.Controllers
     [Route("api/[controller]")]
     public class DoctorsController : ControllerBase
     {
-        private readonly IDoctorService _service;
-
-        public DoctorsController(IDoctorService service)
+        private readonly ILogger<DoctorsController> _logger;
+        private readonly IMediator _mediator;
+        public DoctorsController(IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
         }
 
         // 🔹 1. Create Doctor
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] DoctorDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateDoctorCommand command)
         {
-            var id = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id }, id);
+            var result = await _mediator.Send(command);
+            return Ok(result);            
         }
 
-        // 🔹 2. Get All Doctors
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var data = await _service.GetAllAsync();
-            return Ok(data);
-        }
+        //// 🔹 2. Get All Doctors
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    var data = await _service.GetAllAsync();
+        //    return Ok(data);
+        //}
 
-        // 🔹 3. Get Doctor By Id
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var data = await _service.GetByIdAsync(id);
+        //// 🔹 3. Get Doctor By Id
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetById(int id)
+        //{
+        //    var data = await _service.GetByIdAsync(id);
 
-            if (data == null)
-                return NotFound($"Doctor with Id {id} not found");
+        //    if (data == null)
+        //        return NotFound($"Doctor with Id {id} not found");
 
-            return Ok(data);
-        }
+        //    return Ok(data);
+        //}
 
-        // 🔹 4. Update Doctor
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] DoctorDto dto)
-        {
-            if (id != dto.Id)
-                return BadRequest("Id mismatch");
+        //// 🔹 4. Update Doctor
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Update(int id, [FromBody] DoctorDto dto)
+        //{
+        //    if (id != dto.Id)
+        //        return BadRequest("Id mismatch");
 
-            var result = await _service.UpdateAsync(dto);
+        //    var result = await _service.UpdateAsync(dto);
 
-            if (!result)
-                return NotFound($"Doctor with Id {id} not found");
+        //    if (!result)
+        //        return NotFound($"Doctor with Id {id} not found");
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         //// 🔹 5. Update Doctor Status
         //[HttpPatch("{id}/status")]
@@ -71,15 +71,15 @@ namespace DoctorLicenseManagement.API.Controllers
         //}
 
         // 🔹 6. Soft Delete Doctor
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var result = await _service.DeleteAsync(id);
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var result = await _service.DeleteAsync(id);
 
-            if (!result)
-                return NotFound($"Doctor with Id {id} not found");
+        //    if (!result)
+        //        return NotFound($"Doctor with Id {id} not found");
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
     }
 }
