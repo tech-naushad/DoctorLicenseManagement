@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DoctorLicenseManagement.Domain.Entities;
+using DoctorLicenseManagement.Domain.Enums;
 using DoctorLicenseManagement.Infrastructure.Data;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -8,24 +9,38 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
 {
     public class DoctorRepository : IDoctorRepository
     {
-        private readonly DoctorContext _context;
+        private readonly IDbConnectionFactory _factory;
         private readonly ILogger<DoctorRepository> _logger;
 
-        public DoctorRepository(DoctorContext context, ILogger<DoctorRepository> logger)
+        public DoctorRepository(IDbConnectionFactory factory, ILogger<DoctorRepository> logger)
         {
-            _context = context;
+            _factory = factory;
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Doctor>> GetAllAsync()
+        public async Task<(IEnumerable<Doctor> Doctors, int TotalCount)> GetAllAsync(string? search, LicenseStatus? licenseStatus, 
+            int page, int pageSize)
         {
             try
             {
-                using var con = _context.CreateConnection();
+                // Call your stored procedure with paging params
+                var parameters = new DynamicParameters();
+                parameters.Add("@Search", search);
+                parameters.Add("@Status", licenseStatus);
+                parameters.Add("@Page", page);
+                parameters.Add("@PageSize", pageSize);
 
-                return await con.QueryAsync<Doctor>(
+                using var connection = _factory.CreateConnection();
+
+                using var multi = await connection.QueryMultipleAsync(
                     "sp_GetDoctors",
-                    commandType: CommandType.StoredProcedure);
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                var doctors = await multi.ReadAsync<Doctor>();
+                var totalCount = await multi.ReadFirstAsync<int>();
+                return (doctors, totalCount);
             }
             catch (Exception ex)
             {
@@ -38,9 +53,9 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
         {
             try
             {
-                using var con = _context.CreateConnection();
+                using var con = _factory.CreateConnection();
 
-                return await con.QueryFirstOrDefaultAsync<Doctor>(
+                return await con.QueryFirstOrDefaultAsync(
                     "sp_GetDoctorById",
                     new { Id = id },
                     commandType: CommandType.StoredProcedure);
@@ -56,7 +71,7 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
         {
             try
             {
-                using var con = _context.CreateConnection();
+                using var con = _factory.CreateConnection();
 
                 var parameters = new DynamicParameters();
                 parameters.Add("@FullName", doctor.FullName);
@@ -64,7 +79,7 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
                 parameters.Add("@Specialization", doctor.Specialization);
                 parameters.Add("@LicenseNumber", doctor.LicenseNumber);
                 parameters.Add("@LicenseExpiryDate", doctor.LicenseExpiryDate);
-                parameters.Add("@Status", (int)doctor.Status);
+                parameters.Add("@LicenseStatus", (int)doctor.LicenseStatus);
                 
 
                 return await con.ExecuteScalarAsync<int>(
@@ -83,7 +98,7 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
         {
             try
             {
-                using var con = _context.CreateConnection();
+                using var con = _factory.CreateConnection();
 
                 var parameters = new DynamicParameters();
                 parameters.Add("@Id", doctor.Id);
@@ -92,7 +107,7 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
                 parameters.Add("@Specialization", doctor.Specialization);
                 parameters.Add("@LicenseNumber", doctor.LicenseNumber);
                 parameters.Add("@LicenseExpiryDate", doctor.LicenseExpiryDate);
-                parameters.Add("@Status", (int)doctor.Status);
+                parameters.Add("@Status", (int)doctor.LicenseStatus);
 
                 var rows = await con.ExecuteAsync(
                     "sp_UpdateDoctor",
@@ -112,7 +127,7 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
         {
             try
             {
-                using var con = _context.CreateConnection();
+                using var con = _factory.CreateConnection();
 
                 var rows = await con.ExecuteAsync(
                     "sp_DeleteDoctor",

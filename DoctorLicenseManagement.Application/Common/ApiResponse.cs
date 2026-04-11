@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoctorLicenseManagement.Application.Queries;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,4 +13,11 @@ namespace DoctorLicenseManagement.Application.Common
         public string Message { get; set; }
         public bool Success { get; set; }
     }
+    public class ApiPageResponse: PageQueryResponse
+    {
+        public string Error { get; set; }
+        public string Message { get; set; }
+        public bool Success { get; set; }
+    }
+    
 }

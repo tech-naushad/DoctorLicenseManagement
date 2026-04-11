@@ -1,4 +1,5 @@
 ﻿using DoctorLicenseManagement.Domain.Entities;
+using DoctorLicenseManagement.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,9 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
 { 
     public interface IDoctorRepository
     {
-        Task<IEnumerable<Doctor>> GetAllAsync();
+        Task<(IEnumerable<Doctor> Doctors, int TotalCount)> GetAllAsync
+            (string? search, LicenseStatus? licenseStatus,
+            int page, int pageSize);
         Task<Doctor?> GetByIdAsync(int id);
         Task<int> CreateAsync(Doctor doctor);
         Task<bool> UpdateAsync(Doctor doctor);

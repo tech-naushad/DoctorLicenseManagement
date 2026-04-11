@@ -1,5 +1,7 @@
 ﻿using DoctorLicenseManagement.Application.Commands.CreateDoctorCommand;
 using DoctorLicenseManagement.Application.Queries;
+using DoctorLicenseManagement.Application.Queries.GetAllDoctors;
+using DoctorLicenseManagement.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +19,16 @@ namespace DoctorLicenseManagement.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] LicenseStatus? licenseStatus,
+             [FromQuery] int page = 1,[FromQuery] int pageSize = 10)
         {
-            var data = await _mediator.Send(new GetAllDoctorsQuery());
+            var data = await _mediator.Send(new GetAllDoctorsQuery 
+            { 
+                Search = search,
+                LicenseStatus = licenseStatus,
+                Page = page,
+                PageSize = pageSize,
+            });
             return Ok(data);
         }
 

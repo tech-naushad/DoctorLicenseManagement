@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_GetDoctors
+ALTER PROCEDURE sp_GetDoctors
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -10,19 +10,19 @@ BEGIN
         Specialization,
         LicenseNumber,
         LicenseExpiryDate,
-        Status,
+        LicenseStatus,
         CreatedDate
     FROM Doctor;
 END
 go
 ------------------------------
-CREATE PROCEDURE sp_CreateDoctor
+ALTER PROCEDURE sp_CreateDoctor
     @FullName NVARCHAR(150),
     @Email NVARCHAR(150),
     @Specialization NVARCHAR(100),
     @LicenseNumber NVARCHAR(100),
     @LicenseExpiryDate DATE,
-    @Status INT
+    @LicenseStatus INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -34,7 +34,7 @@ BEGIN
         Specialization,
         LicenseNumber,
         LicenseExpiryDate,
-        Status,
+        LicenseStatus,
         CreatedDate
     )
     VALUES
@@ -44,7 +44,7 @@ BEGIN
         @Specialization,
         @LicenseNumber,
         @LicenseExpiryDate,
-        @Status,
+        @LicenseStatus,
         GETDATE()
     );
 
@@ -53,14 +53,14 @@ END
 go
 
 ---------------------
-CREATE PROCEDURE sp_UpdateDoctor
+ALTER PROCEDURE sp_UpdateDoctor
     @Id INT,
     @FullName NVARCHAR(150),
     @Email NVARCHAR(150),
     @Specialization NVARCHAR(100),
     @LicenseNumber NVARCHAR(100),
     @LicenseExpiryDate DATE,
-    @Status INT
+    @LicenseStatus INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -72,13 +72,13 @@ BEGIN
         Specialization = @Specialization,
         LicenseNumber = @LicenseNumber,
         LicenseExpiryDate = @LicenseExpiryDate,
-        Status = @Status
+        LicenseStatus = @LicenseStatus
     WHERE Id = @Id;
 END
 go
 
 ----------
-CREATE PROCEDURE sp_DeleteDoctor
+ALTER PROCEDURE sp_DeleteDoctor
     @Id INT
 AS
 BEGIN

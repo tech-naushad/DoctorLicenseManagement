@@ -32,7 +32,7 @@ namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
                 Specialization = command.Specialization,
                 LicenseNumber = command.LicenseNumber,
                 LicenseExpiryDate = DateTime.UtcNow,
-                Status = LicenseStatus.Active
+                LicenseStatus = LicenseStatus.Active
             };
             var result = await _repository.UpdateAsync(newDoctor);
 

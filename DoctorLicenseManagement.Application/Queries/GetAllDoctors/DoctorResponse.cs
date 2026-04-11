@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace DoctorLicenseManagement.Application.Queries
+namespace DoctorLicenseManagement.Application.Queries.GetAllDoctors
 {
     public class DoctorResponse
     {
@@ -28,7 +28,7 @@ namespace DoctorLicenseManagement.Application.Queries
         [JsonPropertyName("license_expiry_date")]
         public DateTime LicenseExpiryDate { get; set; }
 
-        [JsonPropertyName("status")]
-        public LicenseStatus Status { get; set; }
+        [JsonPropertyName("license_status")]
+        public LicenseStatus LicenseStatus { get; set; }
     }
 }

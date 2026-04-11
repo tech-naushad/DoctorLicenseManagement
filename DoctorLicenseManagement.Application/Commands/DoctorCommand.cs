@@ -1,12 +1,5 @@
-﻿using DoctorLicenseManagement.Application.Commands.CreateDoctorCommand;
-using DoctorLicenseManagement.Domain.Enums;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using DoctorLicenseManagement.Domain.Enums;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace DoctorLicenseManagement.Application.Commands
 {
@@ -27,7 +20,7 @@ namespace DoctorLicenseManagement.Application.Commands
         [JsonPropertyName("licenseExpiryDate")]
         public DateTime LicenseExpiryDate { get; set; }
 
-        [JsonPropertyName("status")]
-        public LicenseStatus Status { get; set; }
+        [JsonPropertyName("licenseStatus")]
+        public LicenseStatus LicenseStatus { get; set; }
     }
 }

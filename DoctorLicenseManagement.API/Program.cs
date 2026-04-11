@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddScoped<DoctorContext>();
+builder.Services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddApplicationServices();
 

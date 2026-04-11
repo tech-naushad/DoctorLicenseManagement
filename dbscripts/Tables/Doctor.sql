@@ -7,13 +7,13 @@ CREATE TABLE Doctor (
     Specialization NVARCHAR(100),
     LicenseNumber NVARCHAR(100) UNIQUE NOT NULL,
     LicenseExpiryDate DATE NOT NULL,
-    Status INT NOT NULL, -- ENUM stored as INT
+    LicenseStatus INT NOT NULL, -- ENUM stored as INT
     CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),
 	UpdatedDate DATETIME NULL
 );
 
 ALTER TABLE Doctor
-ADD CONSTRAINT CK_Doctor_Status
-CHECK (Status IN (1, 2, 3));
+ADD CONSTRAINT CK_Doctor_LicenseStatus
+CHECK (LicenseStatus IN (1, 2, 3));
 
  

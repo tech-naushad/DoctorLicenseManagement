@@ -15,7 +15,7 @@ namespace DoctorLicenseManagement.Domain.Entities
         public string Specialization { get; set; }
         public string LicenseNumber { get; set; }
         public DateTime LicenseExpiryDate { get; set; }
-        public LicenseStatus Status { get; set; }        
+        public LicenseStatus LicenseStatus { get; set; }        
         public DateTime CreatedDate { get; set; }
     }
 }

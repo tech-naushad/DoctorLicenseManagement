@@ -31,8 +31,8 @@ namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
                 Email = command.Email,
                 Specialization = command.Specialization,
                 LicenseNumber = command.LicenseNumber,
-                LicenseExpiryDate = DateTime.UtcNow,
-                Status = LicenseStatus.Active
+                LicenseExpiryDate = command.LicenseExpiryDate,
+                LicenseStatus = command.LicenseStatus
             };
             var id = await _repository.CreateAsync(newDoctor);
 

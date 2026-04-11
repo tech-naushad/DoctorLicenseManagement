@@ -9,19 +9,39 @@ using System.Threading.Tasks;
 
 namespace DoctorLicenseManagement.Infrastructure.Data
 {
-    public class DoctorContext
+    public interface IDbConnectionFactory
+    {
+        IDbConnection CreateConnection();
+    }
+    public class SqlConnectionFactory : IDbConnectionFactory
     {
         private readonly IConfiguration _config;
 
-        public DoctorContext(IConfiguration config)
+        public SqlConnectionFactory(IConfiguration config)
         {
             _config = config;
         }
 
         public IDbConnection CreateConnection()
         {
-            return new SqlConnection(_config.GetConnectionString("DoctorLicenseConnection")); 
+            return new SqlConnection(
+                _config.GetConnectionString("DoctorLicenseConnection")
+            );
         }
-         
     }
+    //public class DoctorContext
+    //{
+    //    private readonly IConfiguration _config;
+
+    //    public DoctorContext(IConfiguration config)
+    //    {
+    //        _config = config;
+    //    }
+
+    //    public IDbConnection CreateConnection()
+    //    {
+    //        return new SqlConnection(_config.GetConnectionString("DoctorLicenseConnection")); 
+    //    }
+         
+    //}
 }
