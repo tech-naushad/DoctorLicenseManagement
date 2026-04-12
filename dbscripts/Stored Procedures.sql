@@ -96,7 +96,7 @@ BEGIN
         @LicenseStatus,
         GETDATE()
     );
-	@Message = 'Doctor Created Successfully'
+	set @Message = 'Doctor created successfully'
     SELECT CAST(SCOPE_IDENTITY() AS INT);
 END
 go
@@ -113,7 +113,19 @@ ALTER PROCEDURE sp_UpdateDoctor
 	@Message NVARCHAR(200) OUTPUT
 AS
 BEGIN
-   -- SET NOCOUNT ON;
+   -- ✅ Check duplicate Email
+    IF EXISTS (SELECT 1 FROM Doctor WHERE Email = @Email)
+    BEGIN
+			set @Message = 'Email already exists';
+        RETURN;
+    END
+
+    -- ✅ Check duplicate LicenseNumber
+    IF EXISTS (SELECT 1 FROM Doctor WHERE LicenseNumber = @LicenseNumber)
+    BEGIN
+		set @Message = 'License number already exists';
+        RETURN;
+    END
 
     UPDATE Doctor
     SET 

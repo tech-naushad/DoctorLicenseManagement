@@ -31,9 +31,17 @@ namespace DoctorLicenseManagement.Application.Queries.GetDoctorsById
         public async Task<GetDoctorsByIdResponse> Handle(GetDoctorsByIdQuery query,
             CancellationToken cancellationToken)
         {
-            var result = await _repository.GetByIdAsync
-                (query.Id);
 
+            var result = await _repository.GetByIdAsync(query.Id);
+
+            if (result == null)
+            {
+                return new GetDoctorsByIdResponse
+                {
+                    Success = false,
+                    Message = "Doctor not found."
+                };
+            }
             var response= new GetDoctorsByIdResponse
             {
                 Doctor = new DoctorResponse

@@ -1,5 +1,6 @@
 ﻿using DoctorLicenseManagement.Application.Commands.CreateDoctorCommand;
 using DoctorLicenseManagement.Application.Commands.DeleteDoctorCommand;
+using DoctorLicenseManagement.Application.Commands.UpdateDoctorCommand;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,8 +34,8 @@ namespace DoctorLicenseManagement.API.Controllers
             var result = await _mediator.Send(command);
              
 
-            if (!result.Success)
-                return BadRequest(result);
+           // if (!result.Success)
+                //return BadRequest(result);
 
             return Ok(result);
         }

@@ -4,7 +4,7 @@ using DoctorLicenseManagement.Domain.Enums;
 using DoctorLicenseManagement.Infrastructure.Repositories;
 using MediatR;
 
-namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
+namespace DoctorLicenseManagement.Application.Commands.UpdateDoctorCommand
 {
     public class UpdateDoctorCommand : DoctorCommand,IRequest<UpdateDoctorCommandResponse>
     {
