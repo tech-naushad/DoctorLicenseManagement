@@ -123,23 +123,30 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<(bool Success, string Message)> DeleteAsync(int id)
         {
             try
             {
                 using var con = _factory.CreateConnection();
 
+                var parameters = new DynamicParameters();
+                parameters.Add("@Id", id);
+                parameters.Add("@Message", dbType: DbType.String, size: 200, direction: ParameterDirection.Output);
+
                 var rows = await con.ExecuteAsync(
                     "sp_DeleteDoctor",
-                    new { Id = id },
+                    parameters,
                     commandType: CommandType.StoredProcedure);
 
-                return rows > 0;
+                var message = parameters.Get<string>("@Message");
+
+                return (rows > 0, message);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting doctor with Id {Id}", id);
-                throw;
+
+                return (false, "Error occurred while deleting doctor");
             }
         }
     }

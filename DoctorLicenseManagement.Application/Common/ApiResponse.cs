@@ -1,22 +1,29 @@
 ﻿using DoctorLicenseManagement.Application.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+
 
 namespace DoctorLicenseManagement.Application.Common
 {
     public class ApiResponse
     {
+        [JsonPropertyName("error")]
         public string Error { get; set; }
+
+        [JsonPropertyName("message")]
         public string Message { get; set; }
+
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
     }
     public class ApiPageResponse: PageQueryResponse
     {
+        [JsonPropertyName("error")]
         public string Error { get; set; }
+
+        [JsonPropertyName("message")]
         public string Message { get; set; }
+
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
     }
     

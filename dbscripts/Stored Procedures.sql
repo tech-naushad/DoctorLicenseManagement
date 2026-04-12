@@ -1,18 +1,38 @@
-ALTER PROCEDURE sp_GetDoctors
+ALTER PROCEDURE [dbo].[sp_GetDoctors]
+(
+	@Search   NVARCHAR(100) = NULL,
+    @Status   INT           = NULL,
+    @Page     INT           = 1,
+    @PageSize INT           = 10
+)
 AS
 BEGIN
     SET NOCOUNT ON;
+	
+    DECLARE @Offset INT = (@Page - 1) * @PageSize;
 
-    SELECT 
-        Id,
-        FullName,
-        Email,
-        Specialization,
-        LicenseNumber,
-        LicenseExpiryDate,
-        LicenseStatus,
-        CreatedDate
-    FROM Doctor;
+    -- Result set 1: paged doctors
+    SELECT
+        Id, FullName, Email, Specialization,
+        LicenseNumber, LicenseExpiryDate, LicenseStatus
+    FROM Doctor
+    WHERE
+        (@Search IS NULL OR FullName LIKE '%' + @Search + '%'
+                         OR LicenseNumber LIKE '%' + @Search + '%')
+        AND
+        (@Status IS NULL OR LicenseStatus = @Status)
+    ORDER BY FullName
+    OFFSET @Offset ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
+
+    -- Result set 2: total count
+    SELECT COUNT(*)
+    FROM Doctor
+    WHERE
+        (@Search IS NULL OR FullName LIKE '%' + @Search + '%'
+                         OR LicenseNumber LIKE '%' + @Search + '%')
+        AND
+        (@Status IS NULL OR LicenseStatus = @Status);
 END
 go
 ------------------------------
@@ -84,7 +104,38 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Doctor
-    WHERE Id = @Id;
+    BEGIN TRY
+        BEGIN TRAN;
+
+        IF NOT EXISTS (SELECT 1 FROM Doctor WHERE Id = @Id)
+        BEGIN
+            ROLLBACK TRAN;
+
+            SELECT 
+                CAST(0 AS BIT) AS Success,
+                'Doctor not found' AS Message;
+
+            RETURN;
+        END
+
+        DELETE FROM Doctor
+        WHERE Id = @Id;
+
+        COMMIT TRAN;
+
+        SELECT 
+            CAST(1 AS BIT) AS Success,
+            'Doctor deleted successfully' AS Message;
+
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRAN;
+
+        SELECT 
+            CAST(0 AS BIT) AS Success,
+            ERROR_MESSAGE() AS Message;
+    END CATCH
 END
-go
+GO
+ 

@@ -1,4 +1,5 @@
 ﻿using DoctorLicenseManagement.Application.Commands.CreateDoctorCommand;
+using DoctorLicenseManagement.Application.Commands.DeleteDoctorCommand;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,25 +24,7 @@ namespace DoctorLicenseManagement.API.Controllers
             return Ok(result);            
         }
 
-        //// 🔹 2. Get All Doctors
-        //[HttpGet]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    var data = await _service.GetAllAsync();
-        //    return Ok(data);
-        //}
 
-        //// 🔹 3. Get Doctor By Id
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetById(int id)
-        //{
-        //    var data = await _service.GetByIdAsync(id);
-
-        //    if (data == null)
-        //        return NotFound($"Doctor with Id {id} not found");
-
-        //    return Ok(data);
-        //}
 
         //// 🔹 4. Update Doctor
         //[HttpPut("{id}")]
@@ -70,16 +53,18 @@ namespace DoctorLicenseManagement.API.Controllers
         //    return NoContent();
         //}
 
-        // 🔹 6. Soft Delete Doctor
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var result = await _service.DeleteAsync(id);
 
-        //    if (!result)
-        //        return NotFound($"Doctor with Id {id} not found");
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _mediator.Send(new DeleteDoctorCommand { Id = id });
 
-        //    return NoContent();
-        //}
+            if (!result.Success)
+            {
+                return BadRequest(result); // 400 with message
+            }
+
+            return Ok(result); // 200 with success response
+        }
     }
 }
