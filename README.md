@@ -11,8 +11,7 @@
 ### Key Capabilities
 
 - **License Management**: Create, update, and track medical licenses across multiple jurisdictions
-- **Compliance Tracking**: Automated monitoring of license expiration dates and renewal requirements
-- **Verification Workflow**: Comprehensive verification processes for credential validation
+-- **Verification Workflow**: Comprehensive verification processes for credential validation
 - **Audit Logging**: Complete audit trails for regulatory compliance and accountability
 - **RESTful API**: Modern API design for seamless integration with third-party systems
 
@@ -46,6 +45,7 @@ DoctorLicenseManagement/
 
 - **Repository Pattern**: Data access abstraction layer
 - **Dependency Injection**: Loose coupling and testability
+- **CQRS**:  
 - **SOLID Principles**: Maintainable and scalable codebase
 - **DTOs (Data Transfer Objects)**: API contract separation from domain models
 
@@ -73,7 +73,7 @@ DoctorLicenseManagement/
    ```json
    {
      "ConnectionStrings": {
-       "DefaultConnection": "Server=YOUR_SERVER;Database=DoctorLicense;Trusted_Connection=true;"
+       "DoctorLicenseConnection": "Server=YOUR_SERVER;Database=DoctorLicense;Trusted_Connection=true;"
      }
    }
    ```
@@ -108,28 +108,9 @@ DoctorLicenseManagement/
 
 ### Doctor License Management
 - Add, update, and delete doctor licenses
-- Track license status (Active, Expired, Suspended, Revoked)
+- Track license status (Active, Expired, Suspended)
 - Support for multiple licenses per doctor across jurisdictions
-- License renewal tracking with automated notifications
 
-### Verification Workflow
-- Multi-step verification process for new licenses
-- Document upload and validation
-- Compliance checks against regulatory databases
-- Approval/rejection workflow with audit trails
-
-### Reporting & Analytics
-- License expiration reports
-- Compliance status dashboards
-- Verification metrics and KPIs
-- Custom report generation
-
-### Security & Compliance
-- Role-based access control (RBAC)
-- Encrypted credential storage
-- Complete audit logging
-- HIPAA-compliant data handling
-- Secure API endpoints with JWT authentication
 
 ---
 
@@ -137,31 +118,14 @@ DoctorLicenseManagement/
 
 ### Doctors
 ```
-GET    /api/doctors                    # List all doctors
-GET    /api/doctors/{id}               # Get doctor details
+GET    /api/DoctorsQuery                 # List all doctors
+GET    /api/DoctorsQuery/{id}           # Get doctor details
 POST   /api/doctors                    # Create new doctor
 PUT    /api/doctors/{id}               # Update doctor
 DELETE /api/doctors/{id}               # Delete doctor
 ```
 
-### Licenses
-```
-GET    /api/licenses                   # List all licenses
-GET    /api/licenses/{id}              # Get license details
-POST   /api/licenses                   # Register new license
-PUT    /api/licenses/{id}              # Update license
-DELETE /api/licenses/{id}              # Revoke license
-GET    /api/licenses/expiring-soon     # Get expiring licenses
-```
-
-### Verifications
-```
-GET    /api/verifications              # List verifications
-POST   /api/verifications              # Start verification
-PUT    /api/verifications/{id}/approve # Approve verification
-PUT    /api/verifications/{id}/reject  # Reject verification
-```
-
+ 
 ---
 
 ## 🛠️ Technology Stack
@@ -203,27 +167,9 @@ dotnet test
 ## 📋 Database Schema
 
 Key tables include:
-- **Doctors**: Medical professional information
-- **Licenses**: License details and status
-- **VerificationProcesses**: License verification workflows
-- **AuditLogs**: Comprehensive activity tracking
-- **Users**: System user accounts and roles
+- **Doctor**: Medical professional information
 
 Database initialization scripts are provided in `/dbscripts` directory.
-
----
-
-## 🔐 Security Considerations
-
-- **Authentication**: JWT-based token authentication
-- **Authorization**: Role-based access control (Admin, Verifier, Viewer)
-- **Data Encryption**: Sensitive data encrypted at rest
-- **API Security**: CORS configuration, rate limiting
-- **Audit Trails**: All operations logged with user context and timestamps
-- **Input Validation**: Server-side validation on all endpoints
-- **SQL Injection Prevention**: Parameterized queries via EF Core
-
----
 
 ## 📈 Performance Optimizations
 
