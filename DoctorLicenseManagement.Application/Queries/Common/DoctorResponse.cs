@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace DoctorLicenseManagement.Application.Queries.GetAllDoctors
+namespace DoctorLicenseManagement.Application.Queries.Common
 {
     public class DoctorResponse
     {

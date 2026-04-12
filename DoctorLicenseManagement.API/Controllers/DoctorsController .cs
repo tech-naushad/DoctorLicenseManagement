@@ -15,8 +15,7 @@ namespace DoctorLicenseManagement.API.Controllers
         {
             _mediator = mediator;
         }
-
-        // 🔹 1. Create Doctor
+               
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateDoctorCommand command)
         {
@@ -25,33 +24,20 @@ namespace DoctorLicenseManagement.API.Controllers
         }
 
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateDoctorCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest("Id mismatch");
 
-        //// 🔹 4. Update Doctor
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Update(int id, [FromBody] DoctorDto dto)
-        //{
-        //    if (id != dto.Id)
-        //        return BadRequest("Id mismatch");
+            var result = await _mediator.Send(command);
+             
 
-        //    var result = await _service.UpdateAsync(dto);
+            if (!result.Success)
+                return BadRequest(result);
 
-        //    if (!result)
-        //        return NotFound($"Doctor with Id {id} not found");
-
-        //    return NoContent();
-        //}
-
-        //// 🔹 5. Update Doctor Status
-        //[HttpPatch("{id}/status")]
-        //public async Task<IActionResult> UpdateStatus(int id, [FromBody] int status)
-        //{
-        //    var result = await _service.UpdateStatusAsync(id, status);
-
-        //    if (!result)
-        //        return NotFound($"Doctor with Id {id} not found");
-
-        //    return NoContent();
-        //}
+            return Ok(result);
+        }
 
 
         [HttpDelete("{id}")]
@@ -61,10 +47,10 @@ namespace DoctorLicenseManagement.API.Controllers
 
             if (!result.Success)
             {
-                return BadRequest(result); // 400 with message
+                return BadRequest(result); 
             }
 
-            return Ok(result); // 200 with success response
+            return Ok(result); 
         }
     }
 }

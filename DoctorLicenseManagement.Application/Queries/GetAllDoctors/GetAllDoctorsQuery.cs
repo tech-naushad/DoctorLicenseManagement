@@ -1,4 +1,5 @@
 ﻿using DoctorLicenseManagement.Application.Common;
+using DoctorLicenseManagement.Application.Queries.Common;
 using DoctorLicenseManagement.Domain.Enums;
 using DoctorLicenseManagement.Infrastructure.Repositories;
 using MediatR;

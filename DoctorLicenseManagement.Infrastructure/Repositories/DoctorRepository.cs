@@ -55,7 +55,7 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
             {
                 using var con = _factory.CreateConnection();
 
-                return await con.QueryFirstOrDefaultAsync(
+                return await con.QueryFirstOrDefaultAsync<Doctor>(
                     "sp_GetDoctorById",
                     new { Id = id },
                     commandType: CommandType.StoredProcedure);
@@ -67,7 +67,7 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
             }
         }
 
-        public async Task<int> CreateAsync(Doctor doctor)
+        public async Task<(bool Success, string Message)> CreateAsync(Doctor doctor)
         {
             try
             {
@@ -80,12 +80,16 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
                 parameters.Add("@LicenseNumber", doctor.LicenseNumber);
                 parameters.Add("@LicenseExpiryDate", doctor.LicenseExpiryDate);
                 parameters.Add("@LicenseStatus", (int)doctor.LicenseStatus);
-                
+                parameters.Add("@Message", dbType: DbType.String, size: 200, direction: ParameterDirection.Output);
 
-                return await con.ExecuteScalarAsync<int>(
+                var id= await con.ExecuteScalarAsync<int>(
                     "sp_CreateDoctor",
                     parameters,
                     commandType: CommandType.StoredProcedure);
+
+                var message = parameters.Get<string>("@Message");
+
+                return (id > 0, message);
             }
             catch (Exception ex)
             {
@@ -94,7 +98,7 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> UpdateAsync(Doctor doctor)
+        public async Task<(bool Success, string Message)> UpdateAsync(Doctor doctor)
         {
             try
             {
@@ -107,14 +111,17 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
                 parameters.Add("@Specialization", doctor.Specialization);
                 parameters.Add("@LicenseNumber", doctor.LicenseNumber);
                 parameters.Add("@LicenseExpiryDate", doctor.LicenseExpiryDate);
-                parameters.Add("@Status", (int)doctor.LicenseStatus);
+                parameters.Add("@LicenseStatus", (int)doctor.LicenseStatus);
+                parameters.Add("@Message", dbType: DbType.String, size: 200, direction: ParameterDirection.Output);
 
                 var rows = await con.ExecuteAsync(
                     "sp_UpdateDoctor",
                     parameters,
                     commandType: CommandType.StoredProcedure);
 
-                return rows > 0;
+                var message = parameters.Get<string>("@Message");
+
+                return (rows > 0, message);
             }
             catch (Exception ex)
             {

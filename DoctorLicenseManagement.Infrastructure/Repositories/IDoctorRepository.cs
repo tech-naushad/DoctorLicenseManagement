@@ -14,8 +14,8 @@ namespace DoctorLicenseManagement.Infrastructure.Repositories
             (string? search, LicenseStatus? licenseStatus,
             int page, int pageSize);
         Task<Doctor?> GetByIdAsync(int id);
-        Task<int> CreateAsync(Doctor doctor);
-        Task<bool> UpdateAsync(Doctor doctor);
+        Task<(bool Success, string Message)> CreateAsync(Doctor doctor);
+        Task<(bool Success, string Message)> UpdateAsync(Doctor doctor);
         Task<(bool Success, string Message)> DeleteAsync(int id);
     }
 }

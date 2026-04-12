@@ -25,24 +25,25 @@ namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
         public async Task<UpdateDoctorCommandResponse> Handle(UpdateDoctorCommand command,
             CancellationToken cancellationToken)
         {
-            var newDoctor = new Doctor
+            var updateDoctor = new Doctor
             {
+                Id = command.Id,
                 FullName = command.FullName,
                 Email = command.Email,
                 Specialization = command.Specialization,
                 LicenseNumber = command.LicenseNumber,
-                LicenseExpiryDate = DateTime.UtcNow,
-                LicenseStatus = LicenseStatus.Active
+                LicenseExpiryDate = command.LicenseExpiryDate,
+                LicenseStatus = command.LicenseStatus
             };
-            var result = await _repository.UpdateAsync(newDoctor);
+            var result = await _repository.UpdateAsync(updateDoctor);
 
-            if (result)
+            if (result.Success)
             {
                 return new UpdateDoctorCommandResponse
                 {
                    
                     Success = true,
-                    Message = "Recored Updated Successfully"
+                    Message = result.Message
                 };
             }
             else
@@ -50,7 +51,7 @@ namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
                 return new UpdateDoctorCommandResponse
                 {
                     Success = false,
-                    Message = "Failed to update record"
+                    Error = result.Message
                 };
             }
         }

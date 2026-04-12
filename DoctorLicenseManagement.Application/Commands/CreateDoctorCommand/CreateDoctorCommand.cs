@@ -34,15 +34,14 @@ namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
                 LicenseExpiryDate = command.LicenseExpiryDate,
                 LicenseStatus = command.LicenseStatus
             };
-            var id = await _repository.CreateAsync(newDoctor);
+            var result = await _repository.CreateAsync(newDoctor);
 
-            if (id > 0)
+            if (result.Success)
             {
                 return new CreateDoctorCommandResponse
-                {
-                    Id = id,
+                {                    
                     Success = true,
-                    Message = $"Doctor is created with id {id} "
+                    Message = result.Message
                 };
             }
             else
@@ -50,7 +49,7 @@ namespace DoctorLicenseManagement.Application.Commands.CreateDoctorCommand
                 return new CreateDoctorCommandResponse
                 {
                     Success = false,
-                    Message = "Failed to create Doctor"
+                    Error = result.Message
                 };
             }
         }

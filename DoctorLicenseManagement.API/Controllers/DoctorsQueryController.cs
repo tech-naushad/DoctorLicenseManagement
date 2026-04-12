@@ -1,9 +1,11 @@
 ﻿using DoctorLicenseManagement.Application.Commands.CreateDoctorCommand;
 using DoctorLicenseManagement.Application.Queries;
 using DoctorLicenseManagement.Application.Queries.GetAllDoctors;
+using DoctorLicenseManagement.Application.Queries.GetDoctorsById;
 using DoctorLicenseManagement.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DoctorLicenseManagement.API.Controllers
 {
@@ -22,27 +24,27 @@ namespace DoctorLicenseManagement.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] LicenseStatus? licenseStatus,
              [FromQuery] int page = 1,[FromQuery] int pageSize = 10)
         {
-            var data = await _mediator.Send(new GetAllDoctorsQuery 
+            var response = await _mediator.Send(new GetAllDoctorsQuery 
             { 
                 Search = search,
                 LicenseStatus = licenseStatus,
                 Page = page,
                 PageSize = pageSize,
             });
-            return Ok(data);
+            return Ok(response);
         }
 
-        //// 🔹 3. Get Doctor By Id
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetById(int id)
-        //{
-        //    var data = await _service.GetByIdAsync(id);
 
-        //    if (data == null)
-        //        return NotFound($"Doctor with Id {id} not found");
-
-        //    return Ok(data);
-        //}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var response = await _mediator.Send(new GetDoctorsByIdQuery
+             {
+                 Id = id
+             });
+             
+            return Ok(response);
+        }
 
         //// 🔹 4. Update Doctor
         //[HttpPut("{id}")]
